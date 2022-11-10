@@ -1,7 +1,7 @@
 import { UserProperties } from "../entities/User";
 
 export type Identity = {
-    uid: string,
+    id: string,
     username: string,
     email: string
 }

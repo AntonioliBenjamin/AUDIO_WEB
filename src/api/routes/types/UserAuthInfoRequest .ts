@@ -1,7 +1,7 @@
 import { Request } from "express";
 
 export type UserAuthInfoRequestProperties = {
-    uid: string,
+    id: string,
     email: string,
     username: string
 }

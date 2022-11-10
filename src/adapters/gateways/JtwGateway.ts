@@ -8,7 +8,7 @@ export class JwtGateway implements SignGateway {
   verify(headersToken: string): Identity {
     const decodedUserToken = jwt.verify(headersToken, secretKey) as any 
     return {
-      uid: decodedUserToken.uid,
+      id: decodedUserToken.id,
       email: decodedUserToken.email,
       username: decodedUserToken.username,
     }
@@ -17,7 +17,7 @@ export class JwtGateway implements SignGateway {
   generate(user: UserSigninOutput): string {
     const token = jwt.sign(
       {
-        uid: user.id,
+        id: user.id,
         email: user.email,
         username: user.username
       },
@@ -27,3 +27,4 @@ export class JwtGateway implements SignGateway {
     return token;
   }
 }
+

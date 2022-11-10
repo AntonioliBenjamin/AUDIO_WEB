@@ -26,7 +26,7 @@ router.post("/", (req: UserAuthInfoRequest, res: Response) => {
       vatNumber: req.body.vatNumber,
       emoji: req.body.emoji,
       corporationName: req.body.corporationName,
-      token: req.user.uid,
+      token: req.user.id,
     };
     
     const organization = createOrganisation.execute(body);
@@ -51,7 +51,7 @@ router.patch("/", (req: UserAuthInfoRequest, res: Response) => {
   companyRegistrationNumber: req.body.companyRegistrationNumber,
   vatNumber: req.body.vatNumber,
   emoji: req.body.emoji,
-  token: req.user.uid
+  token: req.user.id
 }
 
 const organization = updateOrganisation.execute(body)

@@ -1,3 +1,4 @@
+
 import { User, UserProperties } from "../../core/entities/User";
 import { UserRepository } from "../../core/repositories/UserRepository";
 
@@ -11,7 +12,12 @@ export type UserOutput = {
   password: string
 }
 
-export class InMemoryUserRepository implements UserRepository {
+export class InMemoryUserRepositorypository implements UserRepository {
+  
+  getById(id: string): UserProperties {
+    return userDb.get(id);
+  }
+
   save(user: User): void {
     userDb.set(user.props.id, user.props);
   }

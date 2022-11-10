@@ -24,7 +24,7 @@ export class CreateUser implements UseCase<UserInput, User> {
         if (isProfileExist) {
         throw new Error("USER ALREADY EXISTS")
         }
-
+        
         const user = User.create({
             id: this.idGateway.generate(),
             email: input.email,
@@ -32,7 +32,7 @@ export class CreateUser implements UseCase<UserInput, User> {
             username: input.username,
             profilePicture: input.profilePicture,    
         })
-        
+  
         this.userRepository.save(user)  
         return user;
     }

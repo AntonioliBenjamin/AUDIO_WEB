@@ -20,7 +20,8 @@ export class UpdateUser implements UseCase<UserInput, UserProperties> {
     ) {}
 
     execute(input: UserInput): UserProperties {
-    const getUser = this.userRepository.getByEmail(input.accessToken)
+    const getUser = this.userRepository.getById(input.accessToken)
+
     const user = new User(getUser)
     const updatedUser = user.update({
         profilePicture : input.profilePicture,

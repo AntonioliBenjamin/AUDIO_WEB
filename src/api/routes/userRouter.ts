@@ -3,14 +3,14 @@ import { UuidGateway } from './../../adapters/gateways/UuidGateway';
 import { Signin } from "../../core/usecases/user/Signin";
 import * as express from "express";
 import { Request, Response } from "express";
-import { InMemoryUserRepository } from "../../adapters/repositories/InMemoryUserRepository";
 import { CreateUser } from "../../core/usecases/user/CreateUser";
 import { BcryptGateway } from '../../adapters/gateways/BcryptGateway';
 import { JwtGateway } from '../../adapters/gateways/JtwGateway';
 import { authorization } from '../midlewares/authorization';
 import { UserAuthInfoRequest } from './types/UserAuthInfoRequest ';
+import { InMemoryUserRepositorypository } from '../../adapters/repositories/InMemoryUserRepository';
 const router = express.Router();
-const inMemoryUserRepository = new InMemoryUserRepository();
+const inMemoryUserRepository = new InMemoryUserRepositorypository();
 const uuidGateway = new UuidGateway()
 const bcryptGateway = new BcryptGateway()
 const jwtGateway = new JwtGateway(); 
@@ -67,7 +67,7 @@ router.post("/signin", async (req: Request, res: Response) => {
 router.use(authorization)
 
 router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
-  try {  
+ try {  
   const body = {
     username: req.body.username,
     profilePicture: req.body.profilePicture,
@@ -80,7 +80,7 @@ router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
     profilePicture: body.profilePicture,
     connectMethod: body.connectMethod,
     password: body.password,
-    accessToken: req.user.email
+    accessToken: req.user.id
   })
 
   return res.status(200).send({
