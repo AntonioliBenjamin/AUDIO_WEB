@@ -68,21 +68,16 @@ export class Organization {
         vatNumber: string,
         emoji?: string,
     }) {
-        return new Organization({
-            id: this.props.id,
-            organizationName: props.organizationName,
-            status: props.status,
-            corporationName: props.corporationName,
-            street: props.street,
-            city: props.city,
-            zipCode: props.zipCode,
-            country: props.country,
-            companyRegistrationNumber: props.companyRegistrationNumber,
-            vatNumber: props.vatNumber,
-            emoji: props.emoji,
-            createdAt: this.props.createdAt,
-            confirmedAt: this.props.confirmedAt,
-            ownerId: this.props.ownerId
-        })
+
+        this.props.organizationName = props.organizationName;
+        this.props.status = props.status;
+        this.props.corporationName = props.corporationName;
+        this.props.street = props.street;
+        this.props.city = props.city;
+        this.props.zipCode = props.zipCode;
+        this.props.companyRegistrationNumber = props.companyRegistrationNumber;
+        this.props.country = props.country;
+        this.props.vatNumber = props.vatNumber;
+        this.props.emoji = props.emoji;
     }
 }

@@ -4,7 +4,6 @@ export enum ConnectMethod {
   email = "email",
 }
 
-
 export type UserProperties = {
   id: string;
   username: string;
@@ -48,16 +47,9 @@ export class User {
     connectMethod: ConnectMethod,
     password: string;
   }) {
-    //comment faire un if (typeof props.connectMethod !=== ConnectMethod) ?
-    return new User({
-      id: this.props.id,
-      username: props.username,
-      profilePicture: props.profilePicture,
-      connectMethod: props.connectMethod,
-      password: props.password,
-      createdAt: this.props.createdAt,
-      confirmedAt: this.props.confirmedAt,
-      email: this.props.email,
-    });
+    this.props.username = props.username;
+    this.props.profilePicture = props.profilePicture;
+    this.props.connectMethod = props.connectMethod;
+    this.props.password = props.password;
   }
 }

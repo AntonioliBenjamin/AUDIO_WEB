@@ -31,19 +31,19 @@ export class Signin implements UseCase<UserSigninInput, UserSigninOutput> {
     }
     const match = await this.encryptionGateway.match(
       input.password,
-      user.password
+      user.props.password
     );
     if (!match) {
       throw new Error("USER NOT FOUND");
     }
 
-    const token = this.signGateway.generate(user);
+    const token = this.signGateway.generate(user.props);
 
     return {
-      id: user.id,
+      id: user.props.id,
       accesToken: token,
-      username: user.username,
-      email: user.email,
+      username: user.props.username,
+      email: user.props.email,
     };
   }
 }

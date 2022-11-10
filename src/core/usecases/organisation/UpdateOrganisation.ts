@@ -24,9 +24,9 @@ export class UpdateOrganisation implements UseCase<UpdateOrganisationInput, Orga
     
     
     execute(input: UpdateOrganisationInput): Organization  {
-        const getOrganization = this.organizationRepository.getOrganisationByOwnerId(input.token)
-        const organisation = new Organization(getOrganization)
-        const updatedOrganisation = organisation.update({
+        const organization = this.organizationRepository.getOrganisationByOwnerId(input.token)
+    
+         organization.update({
             organizationName: input.organizationName,
             status: input.status,
             corporationName: input.corporationName,
@@ -39,7 +39,7 @@ export class UpdateOrganisation implements UseCase<UpdateOrganisationInput, Orga
             emoji: input.emoji
         })
 
-        this.organizationRepository.save(updatedOrganisation)
-        return updatedOrganisation
+        this.organizationRepository.save(organization)
+        return organization
     }
 }

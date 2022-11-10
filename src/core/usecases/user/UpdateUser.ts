@@ -20,16 +20,17 @@ export class UpdateUser implements UseCase<UserInput, UserProperties> {
     ) {}
 
     execute(input: UserInput): UserProperties {
-    const getUser = this.userRepository.getById(input.accessToken)
-
-    const user = new User(getUser)
-    const updatedUser = user.update({
+    const user = this.userRepository.getById(input.accessToken)
+        const password = this.encryptionGateway.encrypt(input.password)
+        
+    user.update({
         profilePicture : input.profilePicture,
         username : input.username,
         connectMethod: input.connectMethod,
         password: this.encryptionGateway.encrypt(input.password)
     })
-    this.userRepository.save(updatedUser)
-        return updatedUser.props   
+    console.log(user)
+    this.userRepository.save(user)
+        return user.props   
     }
-}
+}      

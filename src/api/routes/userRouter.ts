@@ -67,7 +67,7 @@ router.post("/signin", async (req: Request, res: Response) => {
 router.use(authorization)
 
 router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
- try {  
+ //try {  
   const body = {
     username: req.body.username,
     profilePicture: req.body.profilePicture,
@@ -88,12 +88,12 @@ router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
     profilePicture: body.profilePicture,
     connectMethod: body.connectMethod,
     accessToken: req.user.email
-  })
+  })/*
 } catch (err) {
   return res.status(400).send({
     message: err.message
   })
-}
+}*/
 })
 
 export { router as userRouter };

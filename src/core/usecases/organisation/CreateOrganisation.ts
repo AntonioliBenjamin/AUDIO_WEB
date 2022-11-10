@@ -26,7 +26,7 @@ export class CreateOrganisation implements UseCase<OrganizationInput, Organizati
     execute(input: OrganizationInput) {
        const isOrganizationExist = this.organizationRepository.getOrganisationByOwnerId(input.token)
        if (isOrganizationExist) {
-        throw new Error('CORPORATION ALREADY REGISTERED')
+        throw new Error('USER ALREADY HAS AN ORGANIZATION')
        }
 
        const organization = Organization.create({

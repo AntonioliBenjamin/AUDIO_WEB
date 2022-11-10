@@ -1,14 +1,14 @@
-import { Organization, OrganizationProperties } from "../../core/entities/Organization";
+import { Organization } from "../../core/entities/Organization";
 import { OrganizationRepository } from "../../core/repositories/OrganisationRepository";
 
-export const oraganizationDb = new Map();
+export const oraganizationDb = new Map<string, Organization>();
 
 export class InMemoryOrganizationRepository implements OrganizationRepository {
     
-    getOrganisationByOwnerId(ownerId: string): OrganizationProperties {
+    getOrganisationByOwnerId(ownerId: string): Organization {
         return oraganizationDb.get(ownerId);
     }
     save(organization: Organization): void {
-        oraganizationDb.set(organization.props.ownerId, organization.props);
+        oraganizationDb.set(organization.props.ownerId, organization);
     }
 }
