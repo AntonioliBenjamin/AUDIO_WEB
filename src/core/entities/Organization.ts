@@ -1,4 +1,3 @@
-import { oraganizationDb } from './../../adapters/repositories/InMemoryOrganisationRepository';
 export type OrganizationProperties = {
     id: string;
     organizationName: string,

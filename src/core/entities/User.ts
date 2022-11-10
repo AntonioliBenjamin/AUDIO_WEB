@@ -48,7 +48,7 @@ export class User {
     connectMethod: ConnectMethod,
     password: string;
   }) {
-    //comment faire un if (props.connectMethod !=== ConnectMethod) ?
+    //comment faire un if (typeof props.connectMethod !=== ConnectMethod) ?
     return new User({
       id: this.props.id,
       username: props.username,

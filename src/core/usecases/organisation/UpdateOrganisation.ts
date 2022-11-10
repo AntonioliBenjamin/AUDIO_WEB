@@ -1,5 +1,5 @@
 import { OrganizationRepository } from './../../repositories/OrganisationRepository';
-import { Organization, OrganizationProperties } from './../../entities/Organization';
+import { Organization } from './../../entities/Organization';
 import { UseCase } from './../UseCase';
 
 export type UpdateOrganisationInput = {

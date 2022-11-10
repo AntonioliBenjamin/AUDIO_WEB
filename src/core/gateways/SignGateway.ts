@@ -6,7 +6,13 @@ export type Identity = {
     email: string
 }
 
+export type UserInputGenerateToken = {
+    username: string;
+    email: string;
+    id: string;
+}
+
 export interface SignGateway {
-    generate(user: UserProperties): string;
+    generate(user: UserInputGenerateToken): string;
     verify(headersToken : string): Identity;
 }

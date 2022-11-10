@@ -19,7 +19,6 @@ const userSignin = new Signin(inMemoryUserRepository, jwtGateway, bcryptGateway)
 const updateUser = new UpdateUser(inMemoryUserRepository, bcryptGateway)
 const map = new Map();
 
-
 router.post("/", (req: Request, res: Response) => {
   try {
     const body = {
@@ -30,7 +29,7 @@ router.post("/", (req: Request, res: Response) => {
     };
     
     const user = createUser.execute(body);
-
+    
     return res.status(200).send({
       id: user.props.id,
       username: user.props.username,

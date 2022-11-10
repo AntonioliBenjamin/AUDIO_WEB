@@ -1,6 +1,6 @@
-import { UserProperties } from "../../core/entities/User";
 import { Identity, SignGateway } from "../../core/gateways/SignGateway";
 import jwt = require("jsonwebtoken");
+import { UserSigninOutput } from "../../core/usecases/user/Signin";
 const secretKey = "process.env.SECRET_KEY ";
 
 export class JwtGateway implements SignGateway {
@@ -14,7 +14,7 @@ export class JwtGateway implements SignGateway {
     }
   }
 
-  generate(user: UserProperties): string {
+  generate(user: UserSigninOutput): string {
     const token = jwt.sign(
       {
         uid: user.id,
