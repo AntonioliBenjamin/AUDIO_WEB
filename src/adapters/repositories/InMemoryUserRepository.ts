@@ -1,4 +1,4 @@
-import { User, UserProperties } from "../../core/entities/User";
+import { User } from "../../core/entities/User";
 import { UserRepository } from "../../core/repositories/UserRepository";
 
 export const userDb = new Map<string, User>();

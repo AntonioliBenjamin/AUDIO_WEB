@@ -43,6 +43,7 @@ export class CreateOrganisation implements UseCase<OrganizationInput, Organizati
         confirmedAt: null,
         createdAt: new Date(),
         status: 'admin',
+        invitationSent: [],
         ownerId: input.token,
        })
 
