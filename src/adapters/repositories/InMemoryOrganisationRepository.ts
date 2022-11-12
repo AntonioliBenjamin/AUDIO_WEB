@@ -11,4 +11,14 @@ export class InMemoryOrganizationRepository implements OrganizationRepository {
     save(organization: Organization): void {
         oraganizationDb.set(organization.props.ownerId, organization);
     }
+
+    invitationExist(ownerId: string, email: string): boolean {
+        const organization = this.getOrganisationByOwnerId(ownerId)
+        const values = Object.values(organization.props.invitationSent);
+        const isAlreadySent = values.find(v => v.email === email);
+        if (!isAlreadySent) {
+            return false
+        }
+        return true      
+    }
 }

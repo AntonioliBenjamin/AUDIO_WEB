@@ -12,11 +12,11 @@ export type OrganizationProperties = {
   emoji?: string;
   createdAt: Date;
   confirmedAt: Date;
-  invitationSent: Array<string | Date>;
+  invitationSent: Array<InvitationSentProperties>;
   ownerId: string;
 };
 
-export type InvitationSent = {
+export type InvitationSentProperties = {
   username: string;
   email: string;
   addedDate: Date;
@@ -43,7 +43,7 @@ export class Organization {
     emoji?: string;
     createdAt: Date;
     confirmedAt: Date;
-    invitationSent: Array<string | Date>;
+    invitationSent: Array<InvitationSentProperties>;
     ownerId: string;
   }) {
     return new Organization({
@@ -88,14 +88,4 @@ export class Organization {
     this.props.vatNumber = props.vatNumber;
     this.props.emoji = props.emoji;
   }
-
-  addInvitation(props: { username: string; email: string; addedDate: Date }) {
-    this.props.invitationSent.push(
-      props.username,
-      props.email,
-      props.addedDate
-    );
-  }
 }
-
-

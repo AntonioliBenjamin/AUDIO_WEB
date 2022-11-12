@@ -19,21 +19,18 @@ export class SendInvitation implements UseCase<SendInvitationInput, Promise<void
 
     async execute(input: SendInvitationInput): Promise<void> {
         const organization = this.organizationRepository.getOrganisationByOwnerId(input.token)
-        await this.mailerGateway.sendOrganisationInvitationByMail(input.email, organization.props.organizationName)
-        
-        
-       const saveInvitation = {
+        const isAlreadySent = this.organizationRepository.invitationExist(input.token, input.email)
+        if (!isAlreadySent) {         
+        organization.props.invitationSent.push({
             username: input.username,
             email: input.email,
             addedDate: new Date(),   
+        })
+        this.organizationRepository.save(organization)
         }
 
-        organization.addInvitation(saveInvitation)
-        this.organizationRepository.save(organization)
+        await this.mailerGateway.sendOrganisationInvitationByMail(input.email, organization.props.organizationName)  
 
-        console.log(organization.props.invitationSent)
         return 
     }
-
-    
 }

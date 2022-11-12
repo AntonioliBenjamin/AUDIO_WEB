@@ -1,28 +1,33 @@
+import { SentMessageInfo } from "nodemailer";
 import nodemailer = require("nodemailer");
 import { MailerGateway } from "../../core/gateways/MailerGateway";
+const password= process.env.ETHEREAL_PASSWORD
 
 export class NodeMailerGateway implements MailerGateway {
 
-    async sendOrganisationInvitationByMail(email: string, organizationName: string): Promise<void>{
-        let testAccount = await nodemailer.createTestAccount()
+    async sendOrganisationInvitationByMail(email: string, organizationName: string): Promise<SentMessageInfo> {
+        await nodemailer.createTestAccount()
 
-        let transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-              user: testAccount.user, // generated ethereal user
-              pass: testAccount.pass, // generated ethereal password
-            },
-          });
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.ethereal.email',
+          port: 587,
+          auth: {
+              user: 'christian86@ethereal.email',
+              pass: password,
+          }
+      });
 
-          let info = await transporter.sendMail({
-            from: '"AUDIO WEB" <audio-web@no-reply.com>', // sender address
-            to: email, // list of receivers
-            subject: `You have a new invitation from ${organizationName}`, // Subject line
-            text: `Hey! ${organizationName} wants you to join its organization `, // plain text body
-           // html: "<b>Hello world?</b>", // html body
-        
-          });  
+          const info = await transporter.sendMail({
+            from: '"AUDIO WEB" <christian86@ethereal.email>',
+            to: `${email}`,
+            subject: `You have a new invitation from ${organizationName}`,
+            text: `Hey! ${organizationName} wants you to join its organization `, 
+          })
+
+          console.log("Message sent: %s", info.messageId);
+
+          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+           
+      }
     }
-}
+  
