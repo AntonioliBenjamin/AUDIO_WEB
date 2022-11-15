@@ -32,7 +32,6 @@ export class Organization {
   static create(props: {
     id: string;
     organizationName: string;
-    status: string;
     corporationName: string;
     street: string;
     city: string;
@@ -41,15 +40,13 @@ export class Organization {
     companyRegistrationNumber: string;
     vatNumber: string;
     emoji?: string;
-    createdAt: Date;
-    confirmedAt: Date;
-    invitationSent: Array<InvitationSentProperties>;
+
     ownerId: string;
   }) {
     return new Organization({
       id: props.id,
       organizationName: props.organizationName,
-      status: props.status,
+      status: "admin",
       corporationName: props.corporationName,
       street: props.street,
       city: props.city,
@@ -58,8 +55,8 @@ export class Organization {
       companyRegistrationNumber: props.companyRegistrationNumber,
       vatNumber: props.vatNumber,
       emoji: props.emoji,
-      createdAt: props.createdAt,
-      confirmedAt: props.confirmedAt,
+      createdAt: new Date(),
+      confirmedAt: null,
       invitationSent: [],
       ownerId: props.ownerId,
     });

@@ -1,7 +1,8 @@
 import { SentMessageInfo } from "nodemailer";
 import nodemailer = require("nodemailer");
-import { MailerGateway } from "../../core/gateways/MailerGateway";
-const password= process.env.ETHEREAL_PASSWORD
+import { MailerGateway } from "../../gateways/MailerGateway";
+
+const password = process.env.ETHEREAL_PASSWORD
 
 export class NodeMailerGateway implements MailerGateway {
 
@@ -12,8 +13,8 @@ export class NodeMailerGateway implements MailerGateway {
           host: 'smtp.ethereal.email',
           port: 587,
           auth: {
-            user: 'jesus.christiansen19@ethereal.email',
-            pass: 'jHbDQ9umPxTnTt9ggy'
+            user: 'malinda.morissette56@ethereal.email',
+            pass: 'mJGzzf1jBbtKpwW3yf'
           }
       });
           const info = await transporter.sendMail({

@@ -19,8 +19,8 @@ export class CreateUser implements UseCase<UserInput, User> {
         private readonly encryptionGateway: EncryptionGateway,
         ) {}
 
-    execute(input: UserInput): User {
-        const isProfileExist = this.userRepository.getByEmail(input.email.toLocaleLowerCase().trim())    
+    async execute(input: UserInput): Promise<User> {
+        const isProfileExist = await this.userRepository.getByEmail(input.email.toLocaleLowerCase().trim())    
         if (isProfileExist) {
         throw new Error("USER ALREADY EXISTS")
         }
@@ -33,7 +33,7 @@ export class CreateUser implements UseCase<UserInput, User> {
             profilePicture: input.profilePicture,    
         })
   
-        this.userRepository.save(user)  
+        this.userRepository.create(user)  
         return user;
     }
 }

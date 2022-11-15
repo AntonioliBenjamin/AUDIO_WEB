@@ -1,6 +1,5 @@
 import { NodeMailerGateway } from "./../../adapters/gateways/NodeMailerGateway";
 import { UuidGateway } from "./../../adapters/gateways/UuidGateway";
-import { InMemoryOrganizationRepository } from "./../../adapters/repositories/InMemoryOrganisationRepository";
 import {
   CreateOrganisation,
   OrganizationInput,
@@ -14,28 +13,29 @@ import {
   UpdateOrganisationInput,
 } from "../../core/usecases/organisation/UpdateOrganisation";
 import { SendInvitation } from "../../core/usecases/organisation/SendInvitation";
+import { MongoDbOrganizationRepository } from '../../adapters/repositories/mongoDb/repositories/MongoDbOrganizationRepository';
 const router = express.Router();
+const mongoDbOrganizationRepository = new MongoDbOrganizationRepository()
 const uuidGateway = new UuidGateway();
 const nodeMailerGateway = new NodeMailerGateway();
-const inMemoryOrganizationRepository = new InMemoryOrganizationRepository();
 const createOrganisation = new CreateOrganisation(
-  inMemoryOrganizationRepository,
+  mongoDbOrganizationRepository,
   uuidGateway
 );
 const updateOrganisation = new UpdateOrganisation(
-  inMemoryOrganizationRepository
+  mongoDbOrganizationRepository
 );
 const sendInvitation = new SendInvitation(
-  inMemoryOrganizationRepository,
+  mongoDbOrganizationRepository,
   nodeMailerGateway
 );
 
 router.use(authorization);
 
-router.post("/", (req: UserAuthInfoRequest, res: Response) => {
+router.post("/", async (req: UserAuthInfoRequest, res: Response) => {
   try {
     const organisation: OrganizationInput = {
-      name: req.body.organizationName,
+      organizationName: req.body.organizationName,
       street: req.body.street,
       city: req.body.city,
       zipCode: req.body.zipCode,
@@ -47,7 +47,7 @@ router.post("/", (req: UserAuthInfoRequest, res: Response) => {
       token: req.user.id,
     };
 
-    const organization = createOrganisation.execute(organisation);
+    const organization = await createOrganisation.execute(organisation);
 
     return res.status(200).send(organization);
   } catch (err) {
@@ -57,14 +57,14 @@ router.post("/", (req: UserAuthInfoRequest, res: Response) => {
   }
 });
 
-router.post("/sendInvitation", (req: UserAuthInfoRequest, res: Response) => {
-  try {
+router.post("/sendInvitation", async (req: UserAuthInfoRequest, res: Response) => {
+ try {
     const invitation = {
       username: req.body.username,
       email: req.body.email,
       token: req.user.id,
     };
-    sendInvitation.execute(invitation);
+    await sendInvitation.execute(invitation);
 
     return res.status(200).send({
       invitationSentTo: invitation.email,
@@ -74,7 +74,7 @@ router.post("/sendInvitation", (req: UserAuthInfoRequest, res: Response) => {
   }
 });
 
-router.patch("/", (req: UserAuthInfoRequest, res: Response) => {
+router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
   try {
     const updatedOrganisation: UpdateOrganisationInput = {
       organizationName: req.body.organizationName,
@@ -90,7 +90,7 @@ router.patch("/", (req: UserAuthInfoRequest, res: Response) => {
       token: req.user.id,
     };
 
-    const organization = updateOrganisation.execute(updatedOrganisation);
+    const organization = await updateOrganisation.execute(updatedOrganisation);
 
     return res.status(200).send(organization);
   } catch (err) {

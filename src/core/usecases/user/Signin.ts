@@ -24,7 +24,7 @@ export class Signin implements UseCase<UserSigninInput, UserSigninOutput> {
 
   async execute(input: UserSigninInput): Promise<UserSigninOutput> {
 
-    const user = this.userRepository.getByEmail(input.email.toLowerCase())
+    const user = await this.userRepository.getByEmail(input.email.toLowerCase())
 
     if (!user) {
       throw new Error('CANNOT FIND ACCOUNT')

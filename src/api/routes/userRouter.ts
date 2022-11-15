@@ -1,3 +1,4 @@
+import { MongoDbUserRepository } from './../../adapters/repositories/mongoDb/repositories/MongoDbUserRepository';
 import { UpdateUser } from "./../../core/usecases/user/UpdateUser";
 import { UuidGateway } from "./../../adapters/gateways/UuidGateway";
 import { Signin } from "../../core/usecases/user/Signin";
@@ -8,26 +9,25 @@ import { BcryptGateway } from "../../adapters/gateways/BcryptGateway";
 import { JwtGateway } from "../../adapters/gateways/JtwGateway";
 import { authorization } from "../midlewares/authorization";
 import { UserAuthInfoRequest } from "./types/UserAuthInfoRequest ";
-import { InMemoryUserRepositorypository } from "../../adapters/repositories/InMemoryUserRepository";
+const mongoDbUserRepository = new MongoDbUserRepository()
 const router = express.Router();
-const inMemoryUserRepository = new InMemoryUserRepositorypository();
 const uuidGateway = new UuidGateway();
 const bcryptGateway = new BcryptGateway();
 const jwtGateway = new JwtGateway();
 const createUser = new CreateUser(
-  inMemoryUserRepository,
+ mongoDbUserRepository,
   uuidGateway,
   bcryptGateway
 );
 const userSignin = new Signin(
-  inMemoryUserRepository,
+  mongoDbUserRepository,
   jwtGateway,
   bcryptGateway
 );
-const updateUser = new UpdateUser(inMemoryUserRepository, bcryptGateway);
-const map = new Map();
+const updateUser = new UpdateUser(mongoDbUserRepository);
 
-router.post("/", (req: Request, res: Response) => {
+
+router.post("/", async (req: Request, res: Response) => {
   try {
     const body = {
       username: req.body.username,
@@ -36,7 +36,7 @@ router.post("/", (req: Request, res: Response) => {
       profilePicture: req.body.profilePicture,
     };
 
-    const user = createUser.execute(body);
+    const user = await createUser.execute(body);
 
     return res.status(200).send({
       id: user.props.id,
@@ -82,19 +82,18 @@ router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
       password: req.body.password,
     };
 
-    const user = updateUser.execute({
+    await updateUser.execute({
       username: body.username,
       profilePicture: body.profilePicture,
       connectMethod: body.connectMethod,
       password: body.password,
-      accessToken: req.user.id,
+      id: req.user.id,
     });
 
     return res.status(200).send({
       username: body.username,
       profilePicture: body.profilePicture,
       connectMethod: body.connectMethod,
-      accessToken: req.user.email,
     });
   } catch (err) {
     return res.status(400).send({

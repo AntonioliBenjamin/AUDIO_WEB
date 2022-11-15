@@ -23,9 +23,11 @@ export class UpdateOrganisation implements UseCase<UpdateOrganisationInput, Orga
     ) {}    
     
     
-    execute(input: UpdateOrganisationInput): Organization  {
-        const organization = this.organizationRepository.getOrganisationByOwnerId(input.token)
-    
+    async execute(input: UpdateOrganisationInput): Promise<Organization>  {
+        const organization = await this.organizationRepository.getOrganisationByOwnerId(input.token)
+        if (!organization) {
+            throw new Error('Organization not found')
+        }
          organization.update({
             organizationName: input.organizationName,
             status: input.status,
@@ -39,7 +41,7 @@ export class UpdateOrganisation implements UseCase<UpdateOrganisationInput, Orga
             emoji: input.emoji
         })
 
-        this.organizationRepository.save(organization)
+        this.organizationRepository.update(organization)
         return organization
     }
 }
