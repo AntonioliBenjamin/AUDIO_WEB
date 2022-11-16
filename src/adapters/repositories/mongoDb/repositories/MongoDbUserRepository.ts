@@ -29,7 +29,8 @@ export class MongoDbUserRepository implements UserRepository {
       createdAt: user.createdAt,
       confirmedAt: user.confirmedAt,
     };
-    return new User(userProperties);
+    const foundedUser = new User(userProperties)
+    return Promise.resolve(foundedUser)
   }
 
   async getById(id: string): Promise<User> {

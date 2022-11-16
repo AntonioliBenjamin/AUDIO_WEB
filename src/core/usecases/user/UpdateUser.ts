@@ -1,3 +1,4 @@
+import { EncryptionGateway } from "./../../gateways/EncryptionGateway";
 import { ConnectMethod, User, UserProperties } from "./../../entities/User";
 import { UserRepository } from "./../../repositories/UserRepository";
 import { UseCase } from "../UseCase";
@@ -11,10 +12,19 @@ export type UpdateUserCmd = {
 };
 
 export class UpdateUser implements UseCase<UpdateUserCmd, UserProperties> {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly encryptionGateway: EncryptionGateway
+  ) {}
 
   async execute(input: UpdateUserCmd): Promise<UserProperties> {
-    const user = await this.userRepository.update(input);
+    const user = await this.userRepository.update({
+      id: input.id,
+      connectMethod: input.connectMethod,
+      password: this.encryptionGateway.encrypt(input.password),
+      profilePicture: input.profilePicture,
+      username: input.username,
+    });
 
     return Promise.resolve(user.props);
   }

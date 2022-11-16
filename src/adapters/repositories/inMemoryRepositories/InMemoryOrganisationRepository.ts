@@ -1,5 +1,5 @@
-import { OrganizationRepository } from '../../../../core/repositories/OrganisationRepository';
-import { Organization } from './../../../../core/entities/Organization';
+import { OrganizationRepository } from '../../../core/repositories/OrganisationRepository';
+import { Organization } from '../../../core/entities/Organization';
 
 
 

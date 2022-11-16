@@ -21,8 +21,7 @@ export class UpdateOrganisation implements UseCase<UpdateOrganisationInput, Orga
     constructor(
         private readonly organizationRepository: OrganizationRepository
     ) {}    
-    
-    
+     
     async execute(input: UpdateOrganisationInput): Promise<Organization>  {
         const organization = await this.organizationRepository.getOrganisationByOwnerId(input.token)
         if (!organization) {

@@ -10,6 +10,7 @@ import { JwtGateway } from "../../adapters/gateways/JtwGateway";
 import { authorization } from "../midlewares/authorization";
 import { UserAuthInfoRequest } from "./types/UserAuthInfoRequest ";
 const mongoDbUserRepository = new MongoDbUserRepository()
+const encryptionGateway = new BcryptGateway()
 const router = express.Router();
 const uuidGateway = new UuidGateway();
 const bcryptGateway = new BcryptGateway();
@@ -24,7 +25,7 @@ const userSignin = new Signin(
   jwtGateway,
   bcryptGateway
 );
-const updateUser = new UpdateUser(mongoDbUserRepository);
+const updateUser = new UpdateUser(mongoDbUserRepository, encryptionGateway);
 
 
 router.post("/", async (req: Request, res: Response) => {
@@ -74,6 +75,7 @@ router.post("/signin", async (req: Request, res: Response) => {
 router.use(authorization);
 
 router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
+
   try {
     const body = {
       username: req.body.username,
@@ -95,6 +97,7 @@ router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
       profilePicture: body.profilePicture,
       connectMethod: body.connectMethod,
     });
+    
   } catch (err) {
     return res.status(400).send({
       message: err.message,

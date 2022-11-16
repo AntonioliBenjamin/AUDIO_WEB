@@ -28,7 +28,7 @@ export class SendInvitation implements UseCase<SendInvitationInput, Promise<void
        
         await this.organizationRepository.update(organization)
         }
-
+        
         await this.mailerGateway.sendOrganisationInvitation(input.email, organization.props.organizationName)  
         return 
     }
