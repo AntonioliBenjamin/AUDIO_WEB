@@ -29,8 +29,8 @@ export class InMemoryOrganizationRepository implements OrganizationRepository {
     }    
     
     async update(organization: Organization): Promise<Organization> {
-        const organizationFounded = await this.getOrganisationByOwnerId(organization.props.id)  
-        organizationFounded.update({
+        const organizationFounded = await this.getOrganisationByOwnerId(organization.props.ownerId);
+        await organizationFounded.update({
             city: organization.props.city,
             companyRegistrationNumber: organization.props.companyRegistrationNumber,
             corporationName: organization.props.corporationName,

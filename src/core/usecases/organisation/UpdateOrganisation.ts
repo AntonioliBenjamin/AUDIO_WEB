@@ -42,7 +42,7 @@ export class UpdateOrganisation
       emoji: input.emoji,
     });
 
-    const result = this.organizationRepository.update(organization);
+    const result = await this.organizationRepository.update(organization);
     return Promise.resolve(result);
   }
 }

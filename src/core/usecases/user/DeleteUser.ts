@@ -10,6 +10,4 @@ export class DeleteUser implements UseCase<string, Promise<string>> {
         this.userRepository.delete(id)
         return Promise.resolve(id)
     }
-
-
 }

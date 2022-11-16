@@ -6,55 +6,35 @@ import {
 } from "./repositories/InMemoryOrganisationRepository";
 
 const inMemoryOrganizationRepository = new InMemoryOrganizationRepository();
-const updateOrganization = new UpdateOrganisation(inMemoryOrganizationRepository);
-
-// oraganizationDb.set(
-//   "12345",
-//   new Organization({
-//     id: "999999",
-//     organizationName: "johnDoeOrganisation",
-//     corporationName: "johnDoeCorporation",
-//     street: "12 chemin de la calle",
-//     city: "NY",
-//     zipCode: "544887",
-//     country: "USA",
-//     companyRegistrationNumber: "456454854",
-//     vatNumber: "465456465",
-//     emoji: "url:http://....",
-//     confirmedAt: null,
-//     createdAt: null,
-//     ownerId: "12345",
-//     invitationSent: [],
-//     status: "ADMIN",
-//   })
-// );
+const updateOrganization = new UpdateOrganisation(
+  inMemoryOrganizationRepository
+);
 
 describe("Unit - UpdateOrganization", () => {
+  let organization: Organization;
+  beforeAll(() => {
+    organization = new Organization({
+      id: "999999",
+      organizationName: "johnDoeOrganisation",
+      corporationName: "johnDoeCorporation",
+      street: "12 chemin de la calle",
+      city: "NY",
+      zipCode: "544887",
+      country: "USA",
+      companyRegistrationNumber: "456454854",
+      vatNumber: "465456465",
+      emoji: "url:http://....",
+      confirmedAt: null,
+      createdAt: null,
+      ownerId: "12345",
+      invitationSent: [],
+      status: "ADMIN",
+    });
+    organizationDb.set(organization.props.ownerId, organization);
+  });
 
-  let organization : Organization;
-  beforeAll( () => {
-      organization = new Organization({
-          id: "999999",
-          organizationName: "johnDoeOrganisation",
-          corporationName: "johnDoeCorporation",
-          street: "12 chemin de la calle",
-          city: "NY",
-          zipCode: "544887",
-          country: "USA",
-          companyRegistrationNumber: "456454854",
-          vatNumber: "465456465",
-          emoji: "url:http://....",
-          confirmedAt: null,
-          createdAt: null,
-          ownerId: "12345",
-          invitationSent: [],
-          status: "ADMIN"
-        });
-      organizationDb.set(organization.props.ownerId, organization);
-      })
-      
-  it("should update organization", () => {
-    const result = updateOrganization.execute({
+  it("should update organization", async () => {
+    const result = await updateOrganization.execute({
       organizationName: "michelOrganization",
       status: "USER",
       corporationName: "MichelCorporations",
@@ -96,8 +76,8 @@ describe("Unit - UpdateOrganization", () => {
         emoji: "url:http://....",
         token: "INVALID_TOKEN",
       });
-    expect(() => {
-      result();
-    }).toThrow();
+    expect(async () => {
+      await result();
+    }).rejects.toThrow();
   });
 });

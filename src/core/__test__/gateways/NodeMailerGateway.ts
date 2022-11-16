@@ -13,8 +13,8 @@ export class NodeMailerGateway implements MailerGateway {
           host: 'smtp.ethereal.email',
           port: 587,
           auth: {
-            user: 'malinda.morissette56@ethereal.email',
-            pass: 'mJGzzf1jBbtKpwW3yf'
+            user: 'deonte.schmitt4@ethereal.email',
+            pass: 'EKs6mYyeybVzBZrqjr'
           }
       });
           const info = await transporter.sendMail({
