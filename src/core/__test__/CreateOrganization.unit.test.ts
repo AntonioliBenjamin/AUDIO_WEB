@@ -1,7 +1,7 @@
 import { Organization } from './../entities/Organization';
 import { CreateOrganisation } from '../usecases/organisation/CreateOrganisation';
 import { UuidGateway } from './../__test__/gateways/UuidGateway';
-import { InMemoryOrganizationRepository, oraganizationDb } from './repositories/InMemoryOrganisationRepository';
+import { InMemoryOrganizationRepository, organizationDb } from './repositories/InMemoryOrganisationRepository';
 
 const uuidgateway = new UuidGateway()
 const inMemoryOrganizationRepository = new InMemoryOrganizationRepository()
@@ -29,7 +29,7 @@ describe('Unit - CreateOrganisation' , () => {
             invitationSent: [],
             status: "ADMIN"
           });
-        oraganizationDb.set(organization.props.ownerId, organization);
+        organizationDb.set(organization.props.ownerId, organization);
         })
 
     it('should create a new organisation', () => {

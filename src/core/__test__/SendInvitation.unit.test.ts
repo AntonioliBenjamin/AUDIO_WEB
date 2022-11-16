@@ -1,13 +1,13 @@
 import { SendInvitation } from '../usecases/organisation/SendInvitation';
 import { Organization } from '../entities/Organization';
-import {  InMemoryOrganizationRepository, oraganizationDb } from './repositories/InMemoryOrganisationRepository';
+import {  InMemoryOrganizationRepository, organizationDb } from './repositories/InMemoryOrganisationRepository';
 import { NodeMailerGateway } from './gateways/NodeMailerGateway';
 
 const nodeMailerGateway = new NodeMailerGateway()
 const inMemoryOrganizationRepository = new InMemoryOrganizationRepository()
 const sendInvitation = new SendInvitation(inMemoryOrganizationRepository, nodeMailerGateway)
 
-oraganizationDb.set("12345", new Organization({
+organizationDb.set("12345", new Organization({
     id: "999999",
     organizationName: "johnDoeOrganisation",
     corporationName: "johnDoeCorporation",
@@ -54,7 +54,7 @@ describe('Unit - SendInvitation', () => {
             }],
             status: "ADMIN"
           });
-        oraganizationDb.set(organization.props.id, organization);
+        organizationDb.set(organization.props.id, organization);
         })
 
     it('should sendInvitation and save in Database', async () => {

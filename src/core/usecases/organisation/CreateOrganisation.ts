@@ -43,7 +43,7 @@ export class CreateOrganisation implements UseCase<OrganizationInput, Organizati
         ownerId: input.token,
        })
 
-        await this.organizationRepository.save(organization)
+        await this.organizationRepository.create(organization)
 
         return organization
     }

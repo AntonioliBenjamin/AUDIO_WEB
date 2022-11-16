@@ -1,4 +1,4 @@
-import { UpdateUserCmd } from "./../../../../core/usecases/user/UpdateUser";
+import { UpdateUserInput } from "./../../../../core/usecases/user/UpdateUser";
 import {
   UserProperties,
   ConnectMethod,
@@ -29,8 +29,8 @@ export class MongoDbUserRepository implements UserRepository {
       createdAt: user.createdAt,
       confirmedAt: user.confirmedAt,
     };
-    const foundedUser = new User(userProperties)
-    return Promise.resolve(foundedUser)
+    const foundedUser = new User(userProperties);
+    return Promise.resolve(foundedUser);
   }
 
   async getById(id: string): Promise<User> {
@@ -52,7 +52,7 @@ export class MongoDbUserRepository implements UserRepository {
     return new User(userProperties);
   }
 
-  async update(user: UpdateUserCmd): Promise<User> {
+  async update(user: UpdateUserInput): Promise<User> {
     await UserModel.findOneAndUpdate(
       {
         id: user.id,
@@ -64,10 +64,15 @@ export class MongoDbUserRepository implements UserRepository {
         profilePicture: user.profilePicture,
       },
       {
-        upsert: true,
+        upsert: false,
       }
     );
     const result = await this.getById(user.id);
     return Promise.resolve(result);
+  }
+
+  async delete(id: string): Promise<string> {
+    UserModel.deleteOne({ id: id });
+    return Promise.resolve(id)
   }
 }

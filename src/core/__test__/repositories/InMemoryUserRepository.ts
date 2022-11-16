@@ -1,6 +1,6 @@
 import { User } from '../../entities/User';
 import { UserRepository } from '../../repositories/UserRepository';
-import { UpdateUserCmd } from '../../usecases/user/UpdateUser';
+import { UpdateUserInput } from '../../usecases/user/UpdateUser';
 
 export const userDb = new Map<string, User>();
 export type UserOutput = {
@@ -12,7 +12,13 @@ export type UserOutput = {
 }
 
 export class InMemoryUserRepository implements UserRepository {
-  async update(user: UpdateUserCmd ): Promise<User> {
+
+  async create(user: User): Promise<User> {
+    userDb.set(user.props.id, user);
+    return Promise.resolve(user)
+  }
+
+  async update(user: UpdateUserInput ): Promise<User> {
     const userFounded = await this.getById(user.id)  
     userFounded.update({
         profilePicture : user.profilePicture,
@@ -32,14 +38,16 @@ export class InMemoryUserRepository implements UserRepository {
     return Promise.resolve(user);
   }
 
-  async create(user: User): Promise<User> {
-    userDb.set(user.props.id, user);
-    return Promise.resolve(user)
-  }
+
 
   async getByEmail(email: string): Promise<User> { 
     const values = Array.from(userDb.values());
     const user = values.find(v => v.props.email === email);
     return Promise.resolve(user)
+  }  
+  
+  async delete(id: string): Promise<string> {
+    await userDb.delete(id)
+    return Promise.resolve(id)
   }
 }

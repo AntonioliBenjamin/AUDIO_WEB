@@ -1,7 +1,7 @@
-import { InMemoryOrganizationRepository } from './../../../../core/__test__/repositories/InMemoryOrganisationRepository';
 import { OrganizationRepository } from '../../../../core/repositories/OrganisationRepository';
-import { Organization, OrganizationProperties, InvitationSentProperties } from './../../../../core/entities/Organization';
+import { Organization, OrganizationProperties } from './../../../../core/entities/Organization';
 import { OrganizationModel } from '../models/organization';
+
 
 export const oraganizationDb = new Map<string, Organization>();
 
@@ -31,14 +31,14 @@ export class MongoDbOrganizationRepository implements OrganizationRepository {
         return new Organization(organizationProperties);
     }
     
-     save(organization: Organization): Promise<void> {
+     async create(organization: Organization): Promise<Organization> {
         const organizationModel = new OrganizationModel(organization.props);
         console.log(organization)
         organizationModel.save().then(() => console.log('Saved'))
-        return
+        return Promise.resolve(organization)
     }
     
-    async update(organization: Organization): Promise<void> {
+    async update(organization: Organization): Promise<Organization> {
         OrganizationModel.updateOne(
             {ownerId : organization.props.ownerId},
             {  
@@ -56,13 +56,13 @@ export class MongoDbOrganizationRepository implements OrganizationRepository {
             },
             
             ).then(() => console.log('Updated'))
+            return Promise.resolve(organization)
     }
 
     async invitationExist(ownerId: string, email: string): Promise<boolean> {
         const organization = await this.getOrganisationByOwnerId(ownerId)
         const values = Object.values(organization.props.invitationSent);
-        const isAlreadySent = values.find(v => v.email === email); 
-        
+        const isAlreadySent = values.find(v => v.email === email);  
         if (!isAlreadySent) {
             return false
         }

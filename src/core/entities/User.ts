@@ -44,7 +44,7 @@ export class User {
   update(props: {
     username: string;
     profilePicture: string;
-    connectMethod: ConnectMethod,
+    connectMethod: ConnectMethod;
     password: string;
   }) {
     this.props.username = props.username;

@@ -1,4 +1,5 @@
-import { MongoDbUserRepository } from './../../adapters/repositories/mongoDb/repositories/MongoDbUserRepository';
+import { GetUserByEmail } from "./../../core/usecases/user/GetUserByEmail";
+import { MongoDbUserRepository } from "./../../adapters/repositories/mongoDb/repositories/MongoDbUserRepository";
 import { UpdateUser } from "./../../core/usecases/user/UpdateUser";
 import { UuidGateway } from "./../../adapters/gateways/UuidGateway";
 import { Signin } from "../../core/usecases/user/Signin";
@@ -9,24 +10,20 @@ import { BcryptGateway } from "../../adapters/gateways/BcryptGateway";
 import { JwtGateway } from "../../adapters/gateways/JtwGateway";
 import { authorization } from "../midlewares/authorization";
 import { UserAuthInfoRequest } from "./types/UserAuthInfoRequest ";
-const mongoDbUserRepository = new MongoDbUserRepository()
-const encryptionGateway = new BcryptGateway()
+const mongoDbUserRepository = new MongoDbUserRepository();
+const encryptionGateway = new BcryptGateway();
 const router = express.Router();
 const uuidGateway = new UuidGateway();
 const bcryptGateway = new BcryptGateway();
 const jwtGateway = new JwtGateway();
 const createUser = new CreateUser(
- mongoDbUserRepository,
+  mongoDbUserRepository,
   uuidGateway,
   bcryptGateway
 );
-const userSignin = new Signin(
-  mongoDbUserRepository,
-  jwtGateway,
-  bcryptGateway
-);
+const getUserByEmail = new GetUserByEmail(mongoDbUserRepository);
+const userSignin = new Signin(mongoDbUserRepository, jwtGateway, bcryptGateway);
 const updateUser = new UpdateUser(mongoDbUserRepository, encryptionGateway);
-
 
 router.post("/", async (req: Request, res: Response) => {
   try {
@@ -36,7 +33,10 @@ router.post("/", async (req: Request, res: Response) => {
       password: req.body.password,
       profilePicture: req.body.profilePicture,
     };
-
+    const userAlreadyExist = await getUserByEmail.execute(body.email);
+    if (userAlreadyExist) {
+      throw new Error("USER ALREADY EXISTS");
+    }
     const user = await createUser.execute(body);
 
     return res.status(200).send({
@@ -75,7 +75,6 @@ router.post("/signin", async (req: Request, res: Response) => {
 router.use(authorization);
 
 router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
-
   try {
     const body = {
       username: req.body.username,
@@ -97,7 +96,6 @@ router.patch("/", async (req: UserAuthInfoRequest, res: Response) => {
       profilePicture: body.profilePicture,
       connectMethod: body.connectMethod,
     });
-    
   } catch (err) {
     return res.status(400).send({
       message: err.message,

@@ -19,13 +19,6 @@ export class CreateUser implements UseCase<UserInput, User> {
   ) {}
 
   async execute(input: UserInput): Promise<User> {
-    const isProfileExist = await this.userRepository.getByEmail(
-      input.email.toLocaleLowerCase().trim()
-    );
-    if (isProfileExist) {
-      throw new Error("USER ALREADY EXISTS");
-    }
-
     const user = User.create({
       id: this.idGateway.generate(),
       email: input.email,

@@ -2,7 +2,7 @@ import { Organization } from "../entities/Organization";
 import { UpdateOrganisation } from "../usecases/organisation/UpdateOrganisation";
 import {
   InMemoryOrganizationRepository,
-  oraganizationDb,
+  organizationDb,
 } from "./repositories/InMemoryOrganisationRepository";
 
 const inMemoryOrganizationRepository = new InMemoryOrganizationRepository();
@@ -50,7 +50,7 @@ describe("Unit - UpdateOrganization", () => {
           invitationSent: [],
           status: "ADMIN"
         });
-      oraganizationDb.set(organization.props.ownerId, organization);
+      organizationDb.set(organization.props.ownerId, organization);
       })
       
   it("should update organization", () => {
