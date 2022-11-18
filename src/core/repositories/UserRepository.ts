@@ -1,8 +1,10 @@
-import { UserProperties } from './../entities/User';
+import { UpdateUserInput } from './../usecases/user/UpdateUser';
 import { User } from "../entities/User";
 
 export interface UserRepository {
-    save(user: User): void
-    getByEmail(email: string): UserProperties
-    checkAccountExist(email: string, password: string): boolean
+    create(user: User): Promise<User> 
+    getByEmail(email: string): Promise<User> 
+    getById(id: string): Promise<User> 
+    update(user: UpdateUserInput): Promise<User> 
+    delete(id: string): Promise<string>
 }

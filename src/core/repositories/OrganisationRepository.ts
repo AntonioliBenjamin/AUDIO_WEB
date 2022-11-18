@@ -1,6 +1,8 @@
-import { Organization, OrganizationProperties } from './../entities/Organization';
+import { Organization } from "./../entities/Organization";
 
 export interface OrganizationRepository {
-    save(organisation: Organization): void;
-    getOrganisationByOwnerId(ownerId: string): OrganizationProperties;
+  invitationExist(ownerId: string, email: string): Promise<boolean>;
+  create(organisation: Organization): Promise<Organization>;
+  getOrganisationByOwnerId(ownerId: string): Promise<Organization>;
+  update(organization: Organization): Promise<Organization>;
 }

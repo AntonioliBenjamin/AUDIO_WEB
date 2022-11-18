@@ -1,34 +1,31 @@
-import { ConnectMethod, User, UserProperties } from './../../entities/User';
-import { UserRepository } from './../../repositories/UserRepository';
+import { EncryptionGateway } from "./../../gateways/EncryptionGateway";
+import { ConnectMethod, User, UserProperties } from "./../../entities/User";
+import { UserRepository } from "./../../repositories/UserRepository";
 import { UseCase } from "../UseCase";
-import { EncryptionGateway } from '../../gateways/EncryptionGateway';
 
-export type UserInput = {
-username: string,
-profilePicture: string
-connectMethod: ConnectMethod,
-password: string,
-accessToken: string
-}
+export type UpdateUserInput = {
+  id: string;
+  username: string;
+  profilePicture: string;
+  connectMethod: ConnectMethod;
+  password: string;
+};
 
-export class UpdateUser implements UseCase<UserInput, UserProperties> {
+export class UpdateUser implements UseCase<UpdateUserInput, UserProperties> {
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly encryptionGateway: EncryptionGateway
+  ) {}
 
-    constructor
-    (
-        private readonly userRepository: UserRepository,
-        private readonly encryptionGateway: EncryptionGateway,
-    ) {}
+  async execute(input: UpdateUserInput): Promise<UserProperties> {
+    const user = await this.userRepository.update({
+      id: input.id,
+      connectMethod: input.connectMethod,
+      password: this.encryptionGateway.encrypt(input.password),
+      profilePicture: input.profilePicture,
+      username: input.username,
+    });
 
-    execute(input: UserInput): UserProperties {
-    const getUser = this.userRepository.getByEmail(input.accessToken)
-    const user = new User(getUser)
-    const updatedUser = user.update({
-        profilePicture : input.profilePicture,
-        username : input.username,
-        connectMethod: input.connectMethod,
-        password: this.encryptionGateway.encrypt(input.password)
-    })
-    this.userRepository.save(updatedUser)
-        return updatedUser.props   
-    }
+    return Promise.resolve(user.props);
+  }
 }

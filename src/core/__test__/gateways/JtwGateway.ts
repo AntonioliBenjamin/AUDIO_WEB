@@ -1,6 +1,7 @@
-import { Identity, SignGateway } from "../../core/gateways/SignGateway";
 import jwt = require("jsonwebtoken");
-import { UserSigninOutput } from "../../core/usecases/user/Signin";
+import { Identity, SignGateway } from "../../gateways/SignGateway";
+import { UserSigninOutput } from "../../usecases/user/Signin";
+
 const secretKey = "process.env.SECRET_KEY ";
 
 export class JwtGateway implements SignGateway {

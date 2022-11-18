@@ -4,7 +4,7 @@ import { UseCase } from "../UseCase";
 import { IdGateway } from '../../gateways/IdGateway';
 
 export type OrganizationInput = {
-    name: string,
+    organizationName: string,
     corporationName: string,
     street: string,
     city: string,
@@ -23,15 +23,15 @@ export class CreateOrganisation implements UseCase<OrganizationInput, Organizati
         private readonly idGateway: IdGateway,
     ) {}
     
-    execute(input: OrganizationInput) {
-       const isOrganizationExist = this.organizationRepository.getOrganisationByOwnerId(input.token)
+    async execute(input: OrganizationInput) {
+       const isOrganizationExist = await this.organizationRepository.getOrganisationByOwnerId(input.token)
        if (isOrganizationExist) {
-        throw new Error('CORPORATION ALREADY REGISTERED')
+        throw new Error('ORGANIZATION ALREADY EXIST')
        }
 
        const organization = Organization.create({
         id: this.idGateway.generate(),
-        organizationName: input.name,
+        organizationName: input.organizationName,
         corporationName: input.corporationName,
         street: input.street,
         city: input.city,
@@ -40,13 +40,10 @@ export class CreateOrganisation implements UseCase<OrganizationInput, Organizati
         companyRegistrationNumber: input.companyRegistrationNumber,
         vatNumber: input.vatNumber,
         emoji: input.emoji,
-        confirmedAt: null,
-        createdAt: new Date(),
-        status: 'admin',
         ownerId: input.token,
        })
 
-        this.organizationRepository.save(organization)
+        await this.organizationRepository.create(organization)
 
         return organization
     }
